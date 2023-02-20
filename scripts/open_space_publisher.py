@@ -20,8 +20,10 @@ def callback(data, pub=None):
 
 def listener():
     rospy.init_node('open_space_publisher', anonymous=True)
-    pub = rospy.Publisher('open_space', OpenSpace, queue_size=10)
-    rospy.Subscriber('fake_scan', LaserScan, partial(callback, pub=pub))
+    publisher_topic = rospy.get_param('publisher_topic', 'open_space')
+    subscriber_topic = rospy.get_param('subscriber_topic', 'fake_scan')
+    pub = rospy.Publisher(publisher_topic, OpenSpace, queue_size=10)
+    rospy.Subscriber(subscriber_topic, LaserScan, partial(callback, pub=pub))
     
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
